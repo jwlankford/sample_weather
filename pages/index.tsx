@@ -36,11 +36,13 @@ export default function IndexPage() {
                               SUBMIT
                           </button>
               </div>
+              
               </form>
             </div>
         </div>
           {city && <CityWeather city={city}/>}
         </div>
+        <div className="row text-center">The city being query is: {city}</div>
     </div>
   );
 }

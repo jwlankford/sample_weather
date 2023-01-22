@@ -15,10 +15,10 @@ beforeAll(() => {
 
 it("Seattle search term is passed to city-weather", async () => {
   let component = renderrer.create(<IndexPage />).getInstance();
-  expect(screen.getByTestId("city-test")).toHaveValue("");
+
   expect(screen.getByTestId("weather-input")).toBeInTheDocument();
   userEvent.type(screen.getByTestId("weather-input"), "Seattle");
   userEvent.click(screen.getByTestId("search-button"));
   
-  expect(screen.getByTestId("city-test")).toHaveValue("Seattle");
+  expect(screen.getByText(/2 Seattle/i)).toBeInTheDocument();
  });
