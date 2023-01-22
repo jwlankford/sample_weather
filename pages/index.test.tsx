@@ -2,35 +2,23 @@ import { rest } from "msw";
 import { setupServer } from "msw/node";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import renderrer from "react-test-renderer";
 import "isomorphic-unfetch";
 
-import App from "./index";
+import IndexPage from "./index";
 
-const server = setupServer(
-  rest.get("https://api.openweathermap.org/*", (req, res, ctx) => {
-    return res(
-      ctx.json({
-        weather: [
-          {
-            description: "Overcast clouds"
-          }
-        ],
-        main: {
-          // temp in Kelvin
-          temp: 295.372
-        }
-      })
-    );
-  })
-);
+jest.mock("axios");
 
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
-
-test("it shows weather results", async () => {
-  render(<App />);
-  // todo: write some assertions
+beforeAll(() => {
+    render(<IndexPage />);
 });
 
-// todo: add more tests, maybe error handling?
+it("Seattle search term is passed to city-weather", async () => {
+  let component = renderrer.create(<IndexPage />).getInstance();
+  expect(screen.getByTestId("city-test")).toHaveValue("");
+  expect(screen.getByTestId("weather-input")).toBeInTheDocument();
+  userEvent.type(screen.getByTestId("weather-input"), "Seattle");
+  userEvent.click(screen.getByTestId("search-button"));
+  
+  expect(screen.getByTestId("city-test")).toHaveValue("Seattle");
+ });
