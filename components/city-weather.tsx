@@ -23,27 +23,23 @@ function CityWeather(props: any) {
       icon: ""
     }]
   });
-  const [error, setError] = useState({code: ""});
-
-  const API_KEY = "3624edb9aa9ea5f294f4a3f62ff195f8";
-
-  const url = `https://api.openweathermap.org/data/2.5/weather?q=${weatherResult.name}&appid=${API_KEY}`;
-
-  const getdata = async () => {  
-    const response = await axios.get(url);
-    setWeatherResult(response.data);
-    setError(response.data.cod);
-  }
- 
+  
   useEffect(() => {
-    getdata();
+    // get weather data
+    const API_KEY = "3624edb9aa9ea5f294f4a3f62ff195f8";
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${weatherResult.name}&appid=${API_KEY}`;
+
+    // call weather endpoint
+    fetch(url)
+      .then((response) => response.json())
+      .then((response) => {
+        setWeatherResult(response);
+      });
   });
 
   return (
     <div className="city-weather">
         <div className="flex justify-center text-center bg-slate-200">
-          {(error.code === "ERR_BAD_REQUEST") ? 
-          <div className="text-red-500 text-2xl font-bold">City not found</div>:
           <div className="block px-10 m-5 rounded-lg shadow-lg bg-white">
             <div className="inline-block text-gray-800 text-2xl leading-tight font-bold mb-2 mt-5 uppercase">
               <p>{weatherResult.name}</p>
@@ -63,7 +59,6 @@ function CityWeather(props: any) {
                 : null}
             </div>
           </div>
-          }
         </div>
     </div>
   );
